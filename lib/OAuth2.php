@@ -773,6 +773,10 @@ class OAuth2
 
         // Input data by default can be either POST or GET
         if ($request->getMethod() === 'POST') {
+            if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
+                $data = json_decode($request->getContent(), true);
+                $request->request->replace(is_array($data) ? $data : array());
+            }
             $inputData = $request->request->all();
         } else {
             $inputData = $request->query->all();
